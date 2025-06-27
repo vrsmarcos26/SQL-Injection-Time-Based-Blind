@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tela de Login</title>
+        <style>
+            .container{ display: flex; justify-content: center; }
+            .btn-login{ display: flex; justify-content: center; margin-top: 10px; }
+            .input{ margin-top: 5px; }
+        </style> 
+    </head>
+    <body>
+        <div class="container">
+            <div id="login_form">
+                <h3 class="container">Tela de Login</h3>
+                <br>
+                <form onsubmit="fazerLogin(); return false;">
+                    <input id="username" name="username" type="text" placeholder="username" class="input" required><br>
+                    <input id="password" name="password" type="password" placeholder="password" class="input"><br>
+                    <br>
+                    <div class="btn-login">
+                        <button id="login_btn" type="submit">Login</button>
+                    </div> 
+                </form>
+                <p id="message" style="text-align: center; margin-top: 15px;"></p>
+            </div>
+        </div>
+    </body>
+    <script>
+        function fazerLogin(){
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            var messageElement = document.getElementById("message");
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("POST", "login.php", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var resposta = this.responseText.trim();
+
+                    if (resposta === "SUCESSO") {
+                        // Se o login for bem-sucedido, redireciona para a página de sucesso
+                        window.location.href = "pass.php"; 
+                    } else {
+                        // Caso contrário, exibe a mensagem de erro
+                        messageElement.innerText = resposta;
+                    }
+                }
+            };
+            xhttp.send("username="+encodeURIComponent(username)+"&password="+encodeURIComponent(password));
+        }
+    </script>
+</html>
